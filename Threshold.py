@@ -1,6 +1,7 @@
 import pickle
 from sklearn.tree import DecisionTreeClassifier
 from abc import abstractmethod
+from _io import BufferedReader
 
 
 class BaseThreshold:
@@ -13,7 +14,7 @@ class BaseThreshold:
         raise NotImplementedError
 
 
-# HACK a naive implementation
+# a naive implementation
 class NaiveThreshold(BaseThreshold):
     def __init__(self, point_count, value, area, ratio, obliqueness):
         super(NaiveThreshold).__init__()
@@ -33,16 +34,20 @@ class NaiveThreshold(BaseThreshold):
 
 
 class DecisionTreeThreshold(BaseThreshold):
-    def __init__(self, tree):
+    def __init__(self, tree='/Users/liushuheng/Desktop/DecisionTreeData/model994.pkl'):
         super(DecisionTreeThreshold).__init__()
         if isinstance(tree, str):
-            self.tree = pickle.load(str)  # type: DecisionTreeClassifier
+            with open(tree, 'rb') as f:
+                self.tree = pickle.load(f)  # type: DecisionTreeClassifier
+        elif isinstance(tree, BufferedReader):
+            self.tree = pickle.load(tree)
         elif isinstance(tree, DecisionTreeClassifier):
             self.tree = tree
         else:
             self.tree = DecisionTreeClassifier()
 
-    # TODO implement a decision tree model
+    # implement a decision tree model
     def check(self, point_count, value, area, ratio, obliqueness) -> bool:
-        y = self.tree.predict((point_count, value, area, ratio, obliqueness))
+        features = ((point_count, value, area, ratio, obliqueness),)  # input should be reshaped to (-1, 1)
+        y = self.tree.predict(features)
         return bool(y)
