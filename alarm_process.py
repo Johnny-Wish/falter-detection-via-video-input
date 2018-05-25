@@ -63,7 +63,6 @@ class Alarm:
             obliqueness = 0.5
 
         # check whether the shape of foreground should trigger the alarm
-        # TODO wite the following parameters out for decision-tree tuning
         self.parameter_list.append((len(xx), value, area, ratio, obliqueness))
         if self.threshold.check(len(xx), value, area, ratio, obliqueness):
             cv2.rectangle(frame, *vertices, color=(0, 0, 255))
