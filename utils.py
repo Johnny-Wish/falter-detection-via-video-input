@@ -1,3 +1,5 @@
+import os
+import shutil
 import numpy as np
 from shapes import Rectangle, Shape
 
@@ -58,3 +60,9 @@ def coords_within_boundary(xx, yy, upper, lower, left, right, zero_mean=False):
         coords = coords - np.mean(coords, 0)
         # print(coords.shape)
     return coords
+
+
+def force_mkdir(dir):
+    if os.path.exists(dir):
+        shutil.rmtree(dir)
+    os.makedirs(dir)
