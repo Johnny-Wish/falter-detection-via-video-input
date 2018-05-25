@@ -2,9 +2,10 @@ import os
 import cv2
 import numpy as np
 from shapes import Rectangle, Point
-from utils import fill_zero, find_bounding_box, coords_within_boundary
+from utils import fill_zero, find_bounding_box, coords_within_boundary, force_mkdir
 from sklearn.decomposition import PCA
 from Threshold import BaseThreshold, NaiveThreshold, DecisionTreeThreshold
+from PIL import Image
 
 
 # noinspection PyBroadException
@@ -12,6 +13,8 @@ class Alarm:
     def __init__(self, video_path: str, rectangles: (tuple, list), threshold):
         # store input video path
         self.video_path = video_path
+        self.image_path = video_path.split('/')[-1]
+        force_mkdir(os.path.join('.',self.image_path))
         self.threshold = threshold  # type: BaseThreshold
         self.alarm_list = []
         self.pca_solver = PCA(n_components=1)
@@ -91,6 +94,8 @@ class Alarm:
 
     def _trigger_alarm(self, frame_index, frame):
         print("Alarm at frame %d" % frame_index)
+        img = Image.fromarray(frame)
+        img.save(os.path.join(self.image_path, "warning_frame_%d" % frame_index))
         self.alarm_list.append((frame_index, frame))
 
 
