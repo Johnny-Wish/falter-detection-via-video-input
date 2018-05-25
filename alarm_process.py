@@ -13,8 +13,8 @@ class Alarm:
     def __init__(self, video_path: str, rectangles: (tuple, list), threshold):
         # store input video path
         self.video_path = video_path
-        self.image_path = video_path.split('/')[-1]
-        force_mkdir(os.path.join('.',self.image_path))
+        # self.image_path = video_path.split('/')[-1]
+        # force_mkdir(os.path.join('.',self.image_path))
         self.threshold = threshold  # type: BaseThreshold
         self.alarm_list = []
         self.pca_solver = PCA(n_components=1)
@@ -69,9 +69,11 @@ class Alarm:
         self.parameter_list.append((len(xx), value, area, ratio, obliqueness))
         if self.threshold.check(len(xx), value, area, ratio, obliqueness):
             cv2.rectangle(frame, *vertices, color=(0, 0, 255))
+            cv2.putText(frame, "WARNING", (left, upper), cv2.FONT_HERSHEY_DUPLEX, 1, (0, 0, 255))
             self._trigger_alarm(frame_index, frame)
         else:
             cv2.rectangle(frame, *vertices, color=(255, 0, 0))
+            cv2.putText(frame, "Object", (left, upper), cv2.FONT_HERSHEY_DUPLEX, 1, (255, 0, 0))
 
     def process_video(self, pixel_diff_threshold, pixel_count_threshold, beta):
         self.alarm_list = []
@@ -94,9 +96,9 @@ class Alarm:
 
     def _trigger_alarm(self, frame_index, frame):
         print("Alarm at frame %d" % frame_index)
-        img = Image.fromarray(frame)
-        img.save(os.path.join(self.image_path, "warning_frame_%d" % frame_index))
-        self.alarm_list.append((frame_index, frame))
+        # img = Image.fromarray(frame)
+        # img.save(os.path.join(self.image_path, "warning_frame_%d.jpg" % frame_index))
+        self.alarm_list.append(frame_index)
 
 
 if __name__ == "__main__":
