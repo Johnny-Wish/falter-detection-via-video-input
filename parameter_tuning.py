@@ -20,7 +20,7 @@ if __name__ == "__main__":
     print(score)
 
     # dump the classifier
-    dump_filename = "/Users/liushuheng/Desktop/DecisionTreeData/model%d.pkl" % (score * 1000)
+    dump_filename = "ThresholdModels/model%d.pkl" % (score * 1000)
     with open(dump_filename, 'wb') as fo:
         pkl.dump(classifier, fo)
 

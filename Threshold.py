@@ -34,7 +34,7 @@ class NaiveThreshold(BaseThreshold):
 
 
 class DecisionTreeThreshold(BaseThreshold):
-    def __init__(self, tree='/Users/liushuheng/Desktop/DecisionTreeData/model994.pkl'):
+    def __init__(self, tree="ThresholdModels/model994.pkl"):
         super(DecisionTreeThreshold).__init__()
         if isinstance(tree, str):
             with open(tree, 'rb') as f:
