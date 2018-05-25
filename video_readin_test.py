@@ -13,7 +13,7 @@ if __name__ == "__main__":
     points, values, areas, ratios, obliques = [], [], [], [], []
     # beta = 0.995
     beta = 1.
-    rectangles = []
+    rectangles = list()
     rectangles.append(Rectangle(0, 480, 0, 162))  # sofa
     rectangles.append(Rectangle(125, 300, 162, 214))  # sofa
     # rectangles.append(Rectangle(94, 140, 596, 630))  # cup
@@ -59,6 +59,7 @@ if __name__ == "__main__":
             ratio = 1.
         ratios.append(ratio)
         cv2.rectangle(frame, (left, upper), (right, lower), color=255)
+        cv2.putText(frame, "Object", (left, upper), cv2.FONT_HERSHEY_DUPLEX, 1, (255, 0, 0))
 
         cv2.imshow("frame", frame)
 
