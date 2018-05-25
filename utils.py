@@ -16,7 +16,7 @@ def fill_zero(x: np.array, rect: Rectangle):
             fill_zero(x, r)
 
 
-def find_bounding_box(xx, yy, pix_count_thres = 2000):
+def find_bounding_box(xx, yy, pix_count_thres=2000):
     try:
         assert len(xx) >= pix_count_thres
         upper = int(np.percentile(xx, 25))

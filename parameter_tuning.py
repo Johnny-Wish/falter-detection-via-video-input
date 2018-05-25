@@ -23,3 +23,11 @@ if __name__ == "__main__":
     dump_filename = "/Users/liushuheng/Desktop/DecisionTreeData/model%d.pkl" % (score * 1000)
     with open(dump_filename, 'wb') as fo:
         pkl.dump(classifier, fo)
+
+    # score = 0.994
+    # dump_filename = "/Users/liushuheng/Desktop/DecisionTreeData/model%d.pkl" % (score * 1000)
+    # with open(dump_filename, 'rb') as f:
+    #     new_classifier = pkl.load(f)  # type: DecisionTreeClassifier
+    #
+    # input = ((20000, 800000, 16000, 3.0, 0.91),)
+    # prediction = new_classifier.predict(input)
