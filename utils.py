@@ -1,6 +1,7 @@
 import os
 import shutil
 import numpy as np
+import cv2
 from shapes import Rectangle, Shape
 
 
@@ -66,3 +67,10 @@ def force_mkdir(dir):
     if os.path.exists(dir):
         shutil.rmtree(dir)
     os.makedirs(dir)
+
+
+def get_foreground(frame: np.array, background: np.array, pix_diff_thres):
+    foreground = np.abs(frame.astype(np.int32) - background.astype(np.int32)).astype(np.uint8)
+    foreground[foreground < pix_diff_thres] = 0
+    foreground = cv2.cvtColor(foreground, cv2.COLOR_BGR2GRAY)
+    return foreground
