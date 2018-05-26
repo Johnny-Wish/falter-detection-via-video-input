@@ -19,6 +19,9 @@ if __name__ == "__main__":
     # rectangles.append(Rectangle(94, 140, 596, 630))  # cup
     pca_solver = PCA(n_components=1)
 
+    cv2.namedWindow("frame")
+    cv2.startWindowThread()
+
     while cap.isOpened():
         ret, frame = cap.read()
         if (not ret) or (cv2.waitKey(1) & 0xFF == ord('q')):
@@ -31,7 +34,6 @@ if __name__ == "__main__":
         foreground = np.abs(frame.astype(np.int32) - background.astype(np.int32)).astype(np.uint8)
         foreground[foreground < threshold] = 0
         foreground = cv2.cvtColor(foreground, cv2.COLOR_BGR2GRAY)
-        # TODO refactor the following code to display the original frame and uncropped bounding box
 
         fill_zero(foreground, rectangles)
         xx, yy = np.nonzero(foreground)
@@ -41,7 +43,7 @@ if __name__ == "__main__":
         try:
             assert len(xx) > 6000
             upper, lower, left, right = find_bounding_box(xx, yy)
-            # REVIEW whether the following line is correct
+            # whether the following line is correct
             coords = coords_within_boundary(xx, yy, upper, lower, left, right, zero_mean=True)
             pca_solver.fit(coords)
             oblique = pca_solver.explained_variance_ratio_
@@ -85,5 +87,5 @@ if __name__ == "__main__":
         for count, val, area, ratio, oblique in zip(points, values, areas, ratios, obliques):
             f.write("%d %d %d %f %f\n" % (count, val, area, ratio, oblique))
 
-    # BUG cv2.destoryAllWindows() not working
-    # cv2.destroyAllWindows()
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
