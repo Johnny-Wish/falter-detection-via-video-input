@@ -3,6 +3,7 @@ import shutil
 import numpy as np
 import cv2
 from shapes import Rectangle, Shape
+from PIL import Image
 
 
 # checked
@@ -74,3 +75,11 @@ def get_foreground(frame: np.array, background: np.array, pix_diff_thres):
     foreground[foreground < pix_diff_thres] = 0
     foreground = cv2.cvtColor(foreground, cv2.COLOR_BGR2GRAY)
     return foreground
+
+
+def image2array(img: (str, Image, np.array)) -> np.array:
+    if isinstance(img, str):
+        img = Image.open(img)
+    if isinstance(img, Image.Image):
+        img = np.asarray(img)
+    return img
