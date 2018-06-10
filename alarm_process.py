@@ -2,7 +2,7 @@ import os
 import cv2
 import numpy as np
 from shapes import Rectangle, Point
-from utils import fill_zero, find_bounding_box, coords_within_boundary, get_foreground
+from utils import fill_zero, find_bounding_box, coords_within_boundary, get_foreground, force_mkdir, image2array
 from sklearn.decomposition import PCA
 from Threshold import BaseThreshold, NaiveThreshold, DecisionTreeThreshold
 from PIL import Image
@@ -10,7 +10,7 @@ from PIL import Image
 
 # noinspection PyBroadException
 class Alarm:
-    def __init__(self, video_path: str, rectangles: (tuple, list), threshold):
+    def __init__(self, video_path: str, rectangles: (tuple, list), threshold, bg=None):
         # store input video path
         self.video_path = video_path
         # self.image_path = video_path.split('/')[-1]
@@ -23,8 +23,8 @@ class Alarm:
         # obtain background image
         ret, background = cap.read()
         cap.release()
-        self.background = background if ret else np.zeros((480, 640, 3), dtype=np.uint8)  # type: np.ndarray
-        self.display_background = np.copy(background)
+        self.background = image2array(bg) if bg else background  # type: np.array
+        self.display_background = np.copy(self.background)
         self.pixel_count = self.background.shape[0] * self.background.shape[1]
 
         # define a list of rectangular areas, where alarms are muted
@@ -81,8 +81,6 @@ class Alarm:
         self.alarm_list = []
         cap = cv2.VideoCapture(self.video_path)
         frame_index = 0
-        cv2.namedWindow('frame')
-        # cv2.namedWindow("foreground")
         while cap.isOpened():
             frame_index += 1
             ret, frame = cap.read()
@@ -116,16 +114,30 @@ if __name__ == "__main__":
     rectangles.append(Rectangle(208, 292, 494, 603))  # chair
     # rectangles.append(Rectangle(94, 140, 596, 630))  # cup
     rectangles.append(Rectangle(0, 103, 291, 392))  # mirror
-    rectangles.append(Rectangle(64, 129, 242, 294))  # trash can
-
-    video_path = '/Users/liushuheng/Desktop/falter-data/3.wmv'
-    # threshold = NaiveThreshold(point_count=11500, value=0, area=15000, ratio=0, obliqueness=0.85)
-    threshold = DecisionTreeThreshold()
+    rectangles.append(Rectangle(64, 129, 242, 291))  # trash can
+    video_path = '/Users/liushuheng/Desktop/falter-data/1.wmv'
+    threshold = DecisionTreeThreshold(tree='ThresholdModels/model994.pkl')
     alarm = Alarm(video_path, rectangles, threshold)
-    alarm.process_video(pixel_diff_threshold=40, pixel_count_threshold=4000, beta=0.999)
+    alarm.process_video(pixel_diff_threshold=40, pixel_count_threshold=4000, beta=1.)
 
-    # with open('/Users/liushuheng/Desktop/DecisionTreeInput1.csv', 'w') as f:
+    # rectangles = list()
+    # # rectangles.append(Rectangle(200, 272, 16, 88))  # box
+    # rectangles.append(Rectangle(68, 180, 158, 276))  # chairs
+    # video_path = '/Users/liushuheng/Desktop/falter-data/test2_scaled_trimmed.mp4'
+    # threshold = DecisionTreeThreshold(tree='ThresholdModels/test2-model998.pkl')
+    # alarm = Alarm(video_path, rectangles, threshold,
+    #               bg='/Users/liushuheng/Desktop/falter-data/frames-test2/background.jpg'
+    #               )
+    # alarm.process_video(pixel_diff_threshold=60, pixel_count_threshold=4000, beta=0.999)
+
+    # rectangles = list()
+    # rectangles.append(Rectangle(58, 215, 256, 445))  # two charis
+    # rectangles.append(Rectangle(150, 289, 418, 565))  # chair
+    # video_path = '/Users/liushuheng/Desktop/falter-data/test3_scaled_trimmed.mp4'
+    # threshold = DecisionTreeThreshold(tree='ThresholdModels/test3-model997.pkl')
+    # alarm = Alarm(video_path, rectangles, threshold)
+    # alarm.process_video(pixel_diff_threshold=60, pixel_count_threshold=4000, beta=0.999)
+
+    # with open('/Users/liushuheng/Desktop/DecisionTreeInput_test2.csv', 'w') as f:
     #     for tup in alarm.parameter_list:
     #         f.write("%d,%d,%d,%f,%f\n" % tup)
-
-    # for index in alarm.alarm_list: print(index)
