@@ -51,3 +51,6 @@ class DecisionTreeThreshold(BaseThreshold):
         features = ((point_count, value, area, ratio, obliqueness),)  # input should be reshaped to (-1, 1)
         y = self.tree.predict(features)
         return bool(y)
+
+if __name__ == "__main__":
+    t = DecisionTreeThreshold()
