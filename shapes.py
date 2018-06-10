@@ -1,31 +1,44 @@
+from abc import abstractmethod
+
+
 class Shape:
+    @abstractmethod
     def get_left(self):
         pass
 
+    @abstractmethod
     def get_right(self):
         pass
 
+    @abstractmethod
     def get_lower(self):
         pass
 
+    @abstractmethod
     def get_upper(self):
         pass
 
+    @abstractmethod
     def get_height(self):
         pass
 
+    @abstractmethod
     def get_width(self):
         pass
 
+    @abstractmethod
     def get_circumference(self):
         pass
 
+    @abstractmethod
     def get_area(self):
         pass
 
+    @abstractmethod
     def contains(self, other):
         pass
 
+    @abstractmethod
     def is_contained_in(self, other):
         pass
 
@@ -66,7 +79,7 @@ class Rectangle(Shape):
     def get_ratio(self):
         try:
             ratio = float(self.get_height()) / float(self.get_width())
-            ratio = max(ratio, 1./ratio)
+            ratio = max(ratio, 1. / ratio)
         except:
             ratio = 1.  # default fall back is Square
         return ratio
