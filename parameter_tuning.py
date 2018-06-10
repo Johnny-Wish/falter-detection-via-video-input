@@ -1,10 +1,11 @@
 from sklearn.tree import DecisionTreeClassifier
 import pandas as pd
 import pickle as pkl
-
+import os
 if __name__ == "__main__":
     # load training set
-    data_path = '/Users/liushuheng/Desktop/DecisionTreeData/data.csv'
+    # data_path = '/Users/liushuheng/Desktop/DecisionTreeData/data.csv'
+    data_path = '/Users/liushuheng/Desktop/paired_test2.csv'
     data = pd.read_csv(data_path)
 
     # get input features and ground-truth labels
@@ -12,7 +13,7 @@ if __name__ == "__main__":
     labels = data['label']
 
     # REVIEW consider other combinations of hyperparameters
-    classifier = DecisionTreeClassifier(criterion='entropy', max_depth=4, min_samples_leaf=100, presort=True)
+    classifier = DecisionTreeClassifier(criterion='entropy', max_depth=5, min_samples_leaf=1, presort=True)
 
     # fit the classifier with feature-labels pairs
     classifier.fit(features, labels)
@@ -20,7 +21,8 @@ if __name__ == "__main__":
     print(score)
 
     # dump the classifier
-    dump_filename = "ThresholdModels/model%d.pkl" % (score * 1000)
+    dump_filename = "ThresholdModels/test2-model%d.pkl" % (score * 1000)
+    assert not os.path.isfile(dump_filename)
     with open(dump_filename, 'wb') as fo:
         pkl.dump(classifier, fo)
 
