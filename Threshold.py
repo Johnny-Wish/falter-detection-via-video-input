@@ -52,5 +52,6 @@ class DecisionTreeThreshold(BaseThreshold):
         y = self.tree.predict(features)
         return bool(y)
 
+
 if __name__ == "__main__":
     t = DecisionTreeThreshold()

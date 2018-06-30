@@ -115,7 +115,7 @@ if __name__ == "__main__":
     # rectangles.append(Rectangle(94, 140, 596, 630))  # cup
     rectangles.append(Rectangle(0, 103, 291, 392))  # mirror
     rectangles.append(Rectangle(64, 129, 242, 291))  # trash can
-    video_path = '/Users/liushuheng/Desktop/falter-data/1.wmv'
+    video_path = '/Users/liushuheng/Desktop/falter-data/3.wmv'
     threshold = DecisionTreeThreshold(tree='ThresholdModels/model994.pkl')
     alarm = Alarm(video_path, rectangles, threshold)
     alarm.process_video(pixel_diff_threshold=40, pixel_count_threshold=4000, beta=1.)
